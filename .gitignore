@@ -1,1 +1,8 @@
 .env
+
+# Banco de dados local
+backend/db.sqlite3
+
+# Virtual environment
+backend/venv/
+
