@@ -17,3 +17,11 @@ class Customer(models.Model):  # ou TimeStampedModel
     class Meta:
         verbose_name = "Customer"
         verbose_name_plural = "Customers"
+
+    @property
+    def name(self):
+        return f"{self.user.name}"
+
+    @property
+    def email(self):
+        return f"{self.user.email}"
