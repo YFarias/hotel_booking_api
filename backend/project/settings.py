@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "customers",
     "hotels",
     "employers",
+    "rooms",
 ]
 
 AUTH_USER_MODEL = "users.User"
