@@ -10,7 +10,7 @@ from .serializers import (
 
 class ReservationViewSet(viewsets.ModelViewSet):
     """
-    CRUD básico para reservations.
+    CRUD
     - GET list/retrieve -> ReservationSerializer
     - POST create       -> ReservationCreateSerializer
     - DELETE destroy    -> ReservationSerializer
@@ -70,7 +70,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         
-        # Marca o quarto como disponível ao deletar
+        # Mark the room as available when deleting
         instance.room.is_available = True
         instance.room.save()
         
