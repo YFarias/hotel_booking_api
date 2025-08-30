@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.conf import settings
 from rooms.models import Room
 from customers.models import Customer
+import secrets
 
 
 
@@ -32,4 +33,9 @@ class Reservation(models.Model):
 
     def __str__(self):
         return f"{self.customer.user.email} - {self.room.alias}"
+    
+    def save(self, *args, **kwargs):
+        if not self.reservation_code:
+            self.reservation_code = secrets.token_hex(10)
+        super().save(*args, **kwargs)
     

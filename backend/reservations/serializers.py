@@ -40,7 +40,7 @@ class ReservationCreateSerializer(serializers.ModelSerializer):
         room = Room.objects.get(id=room_id)
         customer = Customer.objects.get(id=customer_id)
 
-        if room.is_available:
+        if not room.is_available:
             raise serializers.ValidationError("Room is not available")
 
         #if already have onther reservation in the same room in the same period
