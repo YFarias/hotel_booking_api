@@ -25,7 +25,7 @@ class Reservation(models.Model):
         verbose_name="room",
         related_name="reservation_room_set"
     )
-
+    reservation_code = models.CharField("reservation_code", max_length=20, null=True, blank=True, default="")
     check_in = models.DateField("check_in", null=True, blank=True)
     check_out = models.DateField("check_out", null=True, blank=True)
     booking_status = models.CharField("booking_status", max_length=20, null=True, blank=True, default="Pending")
