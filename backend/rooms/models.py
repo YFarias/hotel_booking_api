@@ -22,7 +22,8 @@ class Room(models.Model):
     is_available = models.BooleanField("is_available", default=True)
 
     def __str__(self):
-        return self.number
+        return f"Room {self.number} ({self.hotel.name})"
+
 
     @property
     def alias(self):
