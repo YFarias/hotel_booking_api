@@ -1,0 +1,65 @@
+# docker-compose.yml (dentro da pasta backend/)
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    
+
+  web:
+    build:
+      context: .            # <- ATENÇÃO: ponto
+      dockerfile: Dockerfile
+    container_name: web
+    command: >
+      sh -c "./entrypoint.sh python manage.py runserver 0.0.0.0:8000"
+    environment:
+      DJANGO_SETTINGS_MODULE: project.settings
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      WAIT_REDIS: "1"
+      MIGRATE_ON_START: "1"
+      COLLECTSTATIC: "0"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: worker
+    command: >
+      sh -c "./entrypoint.sh celery -A project worker -l info"
+    environment:
+      DJANGO_SETTINGS_MODULE: project.settings
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      WAIT_REDIS: "1"
+      MIGRATE_ON_START: "0"
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - web
+
+  beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: beat
+    command: >
+      sh -c "./entrypoint.sh celery -A project beat -l info"
+    environment:
+      DJANGO_SETTINGS_MODULE: project.settings
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      WAIT_REDIS: "1"
+      MIGRATE_ON_START: "0"
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - web

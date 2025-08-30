@@ -12,6 +12,13 @@ import secrets
 
 
 
+
+class BookingStatus(models.TextChoices):
+    PENDING   = "Pending",   "Pending"
+    CONFIRMED = "Confirmed", "Confirmed"
+    CANCELLED = "Cancelled", "Cancelled"
+
+
 class Reservation(models.Model):
     customer = models.ForeignKey(
         Customer, 
@@ -29,7 +36,14 @@ class Reservation(models.Model):
     reservation_code = models.CharField("reservation_code", max_length=20, null=True, blank=True, default="")
     check_in = models.DateField("check_in", null=True, blank=True)
     check_out = models.DateField("check_out", null=True, blank=True)
-    booking_status = models.CharField("booking_status", max_length=20, null=True, blank=True, default="Pending")
+    booking_status = models.CharField(
+        "booking_status",
+        max_length=20,
+        choices=BookingStatus.choices,       
+        default=BookingStatus.PENDING,
+        blank=False,
+        null=False,
+    )
 
     def __str__(self):
         return f"{self.customer.user.email} - {self.room.alias}"

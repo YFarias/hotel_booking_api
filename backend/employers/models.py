@@ -15,5 +15,13 @@ class Employer(models.Model):
     is_admin_staff = models.BooleanField(default=False)
     
     def __str__(self):
-        return self.user.name
+        # try the user's name
+        if getattr(self.user, "name", None):
+            return str(self.user.name)
+        # fallback: user's email
+        if getattr(self.user, "email", None):
+            return str(self.user.email)
+        # last fallback: id of the Employer
+        return f"Employer #{self.pk}"
+
     
